@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { useState } from 'react'
 import PrimaryButton from '../PrimaryButton/PrimaryButton'
 import { Link, NavLink } from 'react-router-dom';
 
-function Header() {
+function Header({setAuthType}) {
+    const [isLoggedIn, setIsLoggedIn] = useState()
   return (
     <div>
       <div className='shadow-md bg-white'>
@@ -34,11 +35,15 @@ function Header() {
                 <li className='font-bold cursor-pointer'>Create</li>
                 <li className=''>
                     {/* PrimaryButton */}
-                    <PrimaryButton text={"LogIn"}/>
+                    <PrimaryButton 
+                    onClick={()=>(setAuthType("LogIn"))}
+                    text={"LogIn"}/>
                 </li>
                 <li className=''>
                     {/* PrimaryButton */}
-                    <PrimaryButton text={"SignUp"}/>
+                    <PrimaryButton 
+                    onClick={()=>(setAuthType("SignUp"))}
+                    text={"SignUp"}/>
                 </li>
             </div>
             
