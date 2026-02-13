@@ -5,13 +5,14 @@ import { createRoutesFromElements, Route } from 'react-router-dom'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import Layout from './Layout'
 import { Home, About, Hero } from './Components'
+import { NoteProvider } from './Context/NoteContext'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path='/' element={<Layout />}>
       <Route index element={<Hero />}/>
-      <Route path="home" element={<Home />}/>
-      <Route path="about" element={<About />}/>
+      <Route path="/home" element={<Home />}/>
+      <Route path="/about" element={<About />}/>
 
     </Route>
   )
@@ -19,6 +20,8 @@ const router = createBrowserRouter(
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <NoteProvider >
+      <RouterProvider router={router} />
+    </NoteProvider>
   </StrictMode>,
 )

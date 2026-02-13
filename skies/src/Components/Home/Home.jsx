@@ -1,9 +1,11 @@
 import React from 'react'
+import { useNote } from '../../Context/NoteContext'
 
 function Home() {
+  const {user} = useNote()
   return (
     <div>
-      Home
+      Welcome {user}
     </div>
   )
 }
