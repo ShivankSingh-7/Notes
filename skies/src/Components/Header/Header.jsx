@@ -5,19 +5,26 @@ import { useNote } from "../../Context/NoteContext";
 import { useNavigate } from "react-router-dom";
 
 function Header({ setAuthType }) {
-  const { isLoggedIn, setIsLoggedIn } = useNote();
+  const { isLoggedIn, setIsLoggedIn,setInNote } = useNote();
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
-  const handleLogOut = ()=>{
-    setIsLoggedIn(false)
+  const handleLogOut = () => {
+    setIsLoggedIn(false);
 
-    navigate("/")
+    navigate("/");
+  };
+
+
+  const handleCreate = () =>{
+    setInNote(true);
+    navigate("/note/new")
   }
+
   return (
     <div>
       <div className="shadow-md bg-white">
-        <ul className="flex justify-between p-3 m-2">
+        <ul className="flex justify-between px-5 py-3 ">
           <div>
             <li className="text-2xl font-bold ">
               <NavLink to="/">Skies</NavLink>
@@ -29,20 +36,19 @@ function Header({ setAuthType }) {
                 <NavLink to="home">Home</NavLink>
               </li>
             )}
-            {isLoggedIn && (
+            {isLoggedIn &&(
               <li className="font-bold cursor-pointer">
                 <NavLink to="about">About</NavLink>
               </li>
             )}
-            {isLoggedIn && <li className="font-bold cursor-pointer">Create</li>}
+            {isLoggedIn && (
+              <li className="font-bold cursor-pointer" onClick={handleCreate}>Create</li>
+            )}
 
             {isLoggedIn && (
               <li className="">
                 {/* LogoOut Button */}
-                <PrimaryButton
-                  onClick={()=>(handleLogOut())}
-                  text={"LogOut"}
-                />
+                <PrimaryButton onClick={() => handleLogOut()} text={"LogOut"} />
               </li>
             )}
 
@@ -64,6 +70,7 @@ function Header({ setAuthType }) {
                 />
               </li>
             )}
+            
           </div>
         </ul>
       </div>

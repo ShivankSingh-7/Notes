@@ -1,1 +1,27 @@
 @import "tailwindcss";
+
+@theme {
+  --font-cursive: "Cedarville Cursive", cursive;
+  --font-ephesis: "Ephesis", cursive;
+}
+
+@layer utilities {
+  .shadow-inner-all {
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.8);
+  }
+  
+  .shadow-outer-all {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  }
+}
+
+@layer utilities {
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}

@@ -7,6 +7,7 @@ export const NoteProvider = ({ children }) => {
   const[userName, setUserName] = useState()
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState("")
+  const [inNote, setInNote] = useState(true)
 
   const addNote = (title, note) => {
     setNotes((prev) => [...prev, { id: Date.now(), title, note }]);
@@ -36,6 +37,23 @@ export const NoteProvider = ({ children }) => {
     localStorage.setItem("notes", JSON.stringify(notes))
   },[notes])
 
+
+  const saveNote = (id, title, note) =>{
+    if(id === "new"){
+        addNote(title, note)
+    }
+    else{
+        updateNote(id, title, note)
+    }
+
+    localStorage.removeItem("draft-note")
+  }
+
+
+  const cancelNote = () =>{
+    localStorage.removeItem("draft-note")
+  }
+
   return (
     <NoteContext.Provider
       value={{
@@ -49,7 +67,11 @@ export const NoteProvider = ({ children }) => {
         userName,
         setUserName,
         user,
-        setUser
+        setUser,
+        inNote,
+        setInNote,
+        saveNote,
+        cancelNote
       }}
     >
       {children}
