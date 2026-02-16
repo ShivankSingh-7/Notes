@@ -3,6 +3,7 @@ import Header from "./Components/Header/Header";
 import { Outlet } from "react-router-dom";
 import Login from "./Components/Login/Login";
 import SignUp from "./Components/SignUp/SignUp";
+
 function Layout() {
   const [authType, setAuthType] = useState(null);
   return (
@@ -12,7 +13,7 @@ function Layout() {
       {authType === "LogIn" && <Login setAuthType={setAuthType} />}
       {authType === "SignUp" && <SignUp />}
 
-      <main className="flex-1">
+      <main className="flex-1 overflow-hidden">
         <Outlet />
       </main>
     </div>

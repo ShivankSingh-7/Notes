@@ -21,7 +21,7 @@ const router = createBrowserRouter(
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <NoteProvider >
+    <NoteProvider>
       <RouterProvider router={router} />
     </NoteProvider>
   </StrictMode>,
