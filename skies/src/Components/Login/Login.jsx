@@ -11,7 +11,7 @@ import { useNote } from "../../Context/NoteContext";
 import { useNavigate } from "react-router-dom";
 
 function Login({ setAuthType }) {
-  const { userName, setUserName, isLoggedIn, setIsLoggedIn, setUser } =
+  const { userName, setUserName, setIsLoggedIn, setUser } =
     useNote();
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
