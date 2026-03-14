@@ -11,7 +11,7 @@ function Layout() {
       <Header setAuthType={setAuthType} />
 
       {authType === "LogIn" && <Login setAuthType={setAuthType} />}
-      {authType === "SignUp" && <SignUp />}
+      {authType === "SignUp" && <SignUp setAuthType={setAuthType}/>}
 
       <main className="flex-1 overflow-hidden">
         <Outlet />
