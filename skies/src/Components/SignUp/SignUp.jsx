@@ -46,88 +46,94 @@ function SignUp({ setAuthType }) {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex justify-center items-center z-50 animate-fadeIn">
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md mx-4 animate-scaleIn">
-        <div className="bg-gradient-to-r from-cyan-500 to-blue-600 px-8 py-8 rounded-t-2xl relative">
-          {/* button to cacel */}
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-md flex justify-center items-center z-50 animate-fadeIn">
+      <div className="bg-white rounded-3xl shadow-2xl w-full max-w-md mx-4 overflow-hidden animate-scaleIn">
+
+        {/* Header */}
+        <div className="bg-gradient-to-br from-cyan-400 via-cyan-500 to-blue-600 px-8 py-10 relative">
           <button
             onClick={() => setAuthType(null)}
-            className="absolute top-4 right-4 p-2 rounded-full hover:bg-white/20 transition-all duration-200"
+            className="absolute top-4 right-4 p-2 rounded-full hover:bg-white/20 transition-all duration-200 cursor-pointer"
           >
-            <FaTimes className="text-white" />
+            <FaTimes className="text-white text-sm" />
           </button>
 
-          {/* form data */}
-          <div className="flex justify-center">
-            <h1 className="text-2xl font-bold">Create Account</h1>
+          <div className="flex flex-col items-center gap-2">
+            <div className="w-14 h-14 bg-white/20 rounded-2xl flex items-center justify-center mb-1">
+              <span className="text-2xl">✦</span>
+            </div>
+            <h1 className="text-2xl font-bold text-white tracking-tight">Create Account</h1>
+            <p className="text-cyan-100 text-sm">Fill in the details to get started</p>
           </div>
         </div>
 
+        {/* Error Banner */}
         {error && (
-          <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-2 rounded-lg text-sm">
+          <div className="mx-6 mt-4 bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-xl text-sm flex items-center gap-2">
+            <span className="text-red-400">⚠</span>
             {error}
           </div>
         )}
 
-        {/* form data fields*/}
+        {/* Form */}
         <form
           action="submit"
           onSubmit={handleSubmit}
           className="px-8 py-6 space-y-4"
         >
-          <div className="">
+          <div className="group">
             <input
               type="text"
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
-              className="bg-gray-500 outline-none"
-              placeholder="full name"
+              className="w-full bg-gray-50 border border-gray-200 text-gray-800 placeholder-gray-400 rounded-xl px-4 py-3 text-sm outline-none focus:border-cyan-400 focus:bg-white focus:ring-2 focus:ring-cyan-100 transition-all duration-200"
+              placeholder="Full Name"
             />
           </div>
 
-          <div className="">
+          <div className="group">
             <input
               type="text"
               value={userName}
               onChange={(e) => setUserName(e.target.value)}
-              className="bg-gray-500 outline-none"
-              placeholder="user name"
+              className="w-full bg-gray-50 border border-gray-200 text-gray-800 placeholder-gray-400 rounded-xl px-4 py-3 text-sm outline-none focus:border-cyan-400 focus:bg-white focus:ring-2 focus:ring-cyan-100 transition-all duration-200"
+              placeholder="Username"
             />
           </div>
 
-          <div className="">
+          <div className="group">
             <input
               type="text"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="bg-gray-500 outline-none"
-              placeholder="email"
+              className="w-full bg-gray-50 border border-gray-200 text-gray-800 placeholder-gray-400 rounded-xl px-4 py-3 text-sm outline-none focus:border-cyan-400 focus:bg-white focus:ring-2 focus:ring-cyan-100 transition-all duration-200"
+              placeholder="Email Address"
             />
           </div>
 
-          <div className="">
+          <div className="group">
             <input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="bg-gray-500 outline-none"
-              placeholder="password"
+              className="w-full bg-gray-50 border border-gray-200 text-gray-800 placeholder-gray-400 rounded-xl px-4 py-3 text-sm outline-none focus:border-cyan-400 focus:bg-white focus:ring-2 focus:ring-cyan-100 transition-all duration-200"
+              placeholder="Password"
             />
           </div>
 
-          <div className="">
+          <div className="group">
             <input
               type="password"
               value={confPassword}
               onChange={(e) => setConfPassword(e.target.value)}
-              className="bg-gray-500 outline-none"
-              placeholder="confirm password"
+              className="w-full bg-gray-50 border border-gray-200 text-gray-800 placeholder-gray-400 rounded-xl px-4 py-3 text-sm outline-none focus:border-cyan-400 focus:bg-white focus:ring-2 focus:ring-cyan-100 transition-all duration-200"
+              placeholder="Confirm Password"
             />
           </div>
 
           <button
             type="submit"
-            className="w-full py-3 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white font-semibold rounded-lg transition-all duration-200 hover:shadow-lg"
+            className="w-full py-3 mt-2 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white font-semibold rounded-xl transition-all duration-200 hover:shadow-lg hover:shadow-cyan-200 active:scale-95 tracking-wide text-sm"
           >
             Sign In
           </button>
