@@ -28,5 +28,22 @@ const addNote = asyncHandler(async( req, res)=>{
     )
 })
 
+const getNote = asyncHandler(async(req, res)=>{
+    const notes = await Note.find({owner: req.user._id})
 
-export {addNote}
+    if(!notes){
+        throw new ApiError(404, "No notes found")
+    }
+
+    return res
+    .status(200)
+    .json(
+        new ApiResponse(200,
+            notes, 
+            "notes fetched"
+        )
+    )
+})
+
+
+export {addNote, getNote}
