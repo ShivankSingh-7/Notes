@@ -13,7 +13,7 @@ function SignUp({ setAuthType }) {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  const { setIsLoggedIn, setUserName, userName, setUser } = useNote();
+  const { setIsLoggedIn, setUserName, userName, setUser,  } = useNote();
 
   const handleSubmit = async(e) => {
     e.preventDefault();
@@ -32,12 +32,16 @@ function SignUp({ setAuthType }) {
             email,
             password,
             confPassword
+          },{
+            withCredentials: true
           })
           console.log(response.data)
+          setUserName("")
           setIsLoggedIn(true)
           setUser(response.data.data.userName)
+          setIsLoggedIn(true)
           navigate("/home")
-          setAuthType(true)
+          setAuthType(false)
         } catch (error) {
           setError(error.response?.data?.message || "signup failed")
         }

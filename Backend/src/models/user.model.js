@@ -1,6 +1,7 @@
 import mongoose,{Schema} from "mongoose"
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
+import { truncate } from "fs"
 
 const userSchema = new Schema(
     {
@@ -12,17 +13,16 @@ const userSchema = new Schema(
         userName: {
             type: String,
             required: true,
-            unique: true,
             lowercase: true,
             trim: true,
-            index: true
         },
         email: {
             type: String,
             required: true,
             unique: true,
             trim: true,
-            lowercase: true
+            lowercase: true,
+            index: true
         },
         password: {
             type: String,

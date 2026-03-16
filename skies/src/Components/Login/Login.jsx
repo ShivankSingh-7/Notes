@@ -9,30 +9,42 @@ import {
 } from "react-icons/fa";
 import { useNote } from "../../Context/NoteContext";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 function Login({ setAuthType }) {
-  const { userName, setUserName, setIsLoggedIn, setUser } =
+  const { setIsLoggedIn, setUser, } =
     useNote();
+
+  const [email, setEmail] = useState("")
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
   const navigate = useNavigate();
 
-  const handlesubmit = (e) => {
+  const handlesubmit = async(e) => {
     e.preventDefault();
-
-    if (!password.trim() || !userName.trim()) {
-      setError("Please enter valid credentials");
+    if (!password.trim() || !email.trim()) {
+      setError("Please enter all credentials");
       return;
     }
 
-    setError("");
-    setIsLoggedIn(true);
-    setAuthType(null);
-    setUser(userName);
-    setUserName("");
-    setPassword("");
-    navigate("/home");
+    try {
+      const response = await axios.post("http://localhost:8000/api/v1/login", {
+        email, 
+        password},
+      {withCredentials: true})
+      console.log(response.data)
+      setEmail("")
+      setUser(response.data.data.user.userName)
+      setIsLoggedIn(true)
+      setPassword("")
+      navigate("/home")
+      setAuthType(false)
+      
+    } catch (error) {
+      setError(error.response?.data?.message || "Login Failed")
+    }
+
   };
 
   return (
@@ -68,10 +80,10 @@ function Login({ setAuthType }) {
             <div className="flex items-center bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 focus-within:border-cyan-500 transition-colors">
               <FaUser className="text-gray-400 mr-3" />
               <input
-                value={userName}
-                onChange={(e) => setUserName(e.target.value)}
-                type="text"
-                placeholder="Username"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                type="email"
+                placeholder="email"
                 className="bg-transparent outline-none w-full"
               />
             </div>

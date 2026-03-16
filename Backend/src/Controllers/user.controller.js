@@ -4,6 +4,34 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 import { User } from "../models/user.model.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.utils.js";
 
+
+const cookieOptions = {
+  httpOnly: true,
+  secure: process.env.NODE_ENV === "production",
+  path: "/",
+  sameSite: "lax",
+  maxAge: 24 * 60 * 60 * 1000, // 1 day
+};
+
+
+const generateAccessAndRefershToken = async (userId) => {
+  try {
+    const user = await User.findById(userId);
+    const accessToken = user.generateAccessToken();
+    const refreshToken = user.generateRefreshToken();
+
+    user.refreshToken = refreshToken;
+    await user.save({ validateBeforeSave: false });
+
+    return { accessToken, refreshToken };
+  } catch (error) {
+    throw new ApiError(
+      500,
+      "something went wrong while generating refresh and access token",
+    );
+  }
+};
+
 const registerUser = asyncHandler(async (req, res) => {
   const { userName, email, password, confPassword, fullName } = req.body;
 
@@ -22,7 +50,7 @@ const registerUser = asyncHandler(async (req, res) => {
   const existedUser = await User.findOne({ email });
 
   if (existedUser) {
-    throw new ApiError(409, "user with same email or username already exist");
+    throw new ApiError(409, "user with same email already exist");
   }
 
   const avatarLocalPath = req.file?.avatar?.path;
@@ -42,18 +70,97 @@ const registerUser = asyncHandler(async (req, res) => {
     password,
   });
 
+  const { accessToken, refreshToken } = await generateAccessAndRefershToken(
+    user._id,
+  );
   const createdUser = await User.findById(user._id).select("-refreshToken");
 
   if (!createdUser) {
     throw new ApiError(500, "Something went wrong while regestering the user");
   }
 
+  const options = {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production"
+  };
+
   return res
     .status(201)
+    .cookie("accessToken", accessToken, cookieOptions)
+    .cookie("refreshToken", refreshToken, cookieOptions)
     .json(new ApiResponse(200, createdUser, "user registered successfully"));
 });
 
+const loginUser = asyncHandler(async (req, res) => {
+  const { email, password } = req.body;
 
-export {
-    registerUser
-}
+  if (!email || !password) {
+    throw new ApiError(400, "email and password required");
+  }
+
+  const user = await User.findOne({ email }).select("+password");
+
+  if (!user) {
+    throw new ApiError(404, "User does not exist");
+  }
+
+  const isPasswordValid = await user.isPasswordCorrect(password);
+
+  if (!isPasswordValid) {
+    throw new ApiError(401, "Invalid User Credential");
+  }
+
+  const { accessToken, refreshToken } = await generateAccessAndRefershToken(
+    user._id,
+  );
+
+  const loggedInUser = await User.findById(user._id).select("-refreshToken");
+
+  const options = {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production"
+  };
+
+  return res
+    .status(201)
+    .cookie("accessToken", accessToken, cookieOptions)
+    .cookie("refreshToken", refreshToken, cookieOptions)
+    .json(
+      new ApiResponse(
+        201,
+        {
+          user: loggedInUser,
+          accessToken,
+          refreshToken,
+        },
+        "User logged in Successfully",
+      ),
+    );
+});
+
+const logoutUser = asyncHandler(async (req, res) => {
+  await User.findByIdAndUpdate(
+    req.user._id,
+    {
+      $unset: {
+        refreshToken: 1,
+      },
+    },
+    {
+      new: true,
+    },
+  );
+
+  const options = {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production"
+  };
+
+  return res
+    .status(201)
+    .clearCookie("accessToken", cookieOptions)
+    .clearCookie("refreshToken", cookieOptions)
+    .json(new ApiResponse(201, {}, "User Logged Out Successfully"));
+});
+
+export { registerUser, loginUser, logoutUser };

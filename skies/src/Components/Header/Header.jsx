@@ -5,10 +5,12 @@ import { useNote } from "../../Context/NoteContext";
 import { useNavigate } from "react-router-dom";
 import { FiPlus, FiLogOut, FiHome, FiInfo } from "react-icons/fi";
 
+import axios from "axios";
+
 function Header({ setAuthType }) {
   const { isLoggedIn, setIsLoggedIn, setInNote } = useNote();
   const [isScrolled, setIsScrolled] = useState(false);
-
+  const [logoutError, setLogoutError] = useState()
   const navigate = useNavigate();
 
   // Add scroll listener for header effect
@@ -20,9 +22,14 @@ function Header({ setAuthType }) {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const handleLogOut = () => {
+  const handleLogOut = async() => {
+    try {
+      await axios.post("http://localhost:8000/api/v1/logout", {}, { withCredentials: true })
     setIsLoggedIn(false);
-    navigate("/");
+    } catch (error) {
+      setLogoutError(error.response?.data?.message || "logout failed")
+      console.log(logoutError)
+    }
   };
 
   const handleCreate = () => {
