@@ -23,7 +23,7 @@ function Note() {
         setNoteError("content should not be empty")
       }
   
-      const res = await axios.post(`${baseUrl}/add-note`, {title, content}, {withCredentials: true})
+      const res = await axios.post(`${baseUrl}/api/v1/add-note`, {title, content}, {withCredentials: true})
 
       console.log(res)
     } catch (error) {
@@ -33,7 +33,7 @@ function Note() {
 
   const updateNote = async(id, title, content)=>{
     try {
-      const response = await axios.patch(`${baseUrl}/${id}`, {title, content}, {withCredentials: true})
+      const response = await axios.patch(`${baseUrl}/api/v1/update-note/${id}`, {title, content}, {withCredentials: true})
 
       console.log(response)
     } catch (error) {

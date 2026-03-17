@@ -21,7 +21,7 @@ export const NoteProvider = ({ children }) => {
 
   const deleteNote = async(id) => {
     try {
-      const response = await axios.delete(`${baseUrl}/${id}`, {withCredentials: true})
+      const response = await axios.delete(`${baseUrl}/api/v1/delete-note/${id}`, {withCredentials: true})
 
       console.log(response)
     } catch (error) {
@@ -33,7 +33,7 @@ export const NoteProvider = ({ children }) => {
   // fetching notes from the backend
   const getNote = async()=>{
     try {
-      const res = await axios.get(`${baseUrl}/get-notes`, {withCredentials: true })
+      const res = await axios.get(`${baseUrl}/api/v1/get-notes`, {withCredentials: true })
 
       const notes = res.data.data
       if(notes.length === 0){
