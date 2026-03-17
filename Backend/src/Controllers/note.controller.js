@@ -45,5 +45,24 @@ const getNote = asyncHandler(async(req, res)=>{
     )
 })
 
+const deleteNote = asyncHandler(async(req, res)=>{
+    const noteId = req.params.id
 
-export {addNote, getNote}
+    if(!noteId){
+        throw new ApiError(400, "Invalid request")
+    }
+
+    const deletedNote = await Note.findByIdAndDelete(noteId)
+    
+    if(!deletedNote){
+        throw new ApiError(500, "can not find note")
+    }
+    return res
+    .status(200)
+    .json(
+        new ApiResponse(200, deletedNote, "note successfully deleted")
+    )
+})
+
+
+export {addNote, getNote, deleteNote}

@@ -89,7 +89,7 @@ function Home() {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 animate-fadeIn">
               {notes.map((note, index) => (
                 <div
-                  key={note.id}
+                  key={note._id}
                   className="group animate-scaleIn"
                   style={{ animationDelay: `${index * 50}ms` }}
                 >
@@ -108,7 +108,7 @@ function Home() {
 
                     {/* Note Content */}
                     <p className="flex-1 text-gray-700 text-sm leading-relaxed line-clamp-5 mb-3 overflow-hidden">
-                      {note.note}
+                      {note.content}
                     </p>
 
                     {/* Footer */}
@@ -129,7 +129,7 @@ function Home() {
                           />
                         </svg>
                         <span className="text-xs text-gray-700 font-medium">
-                          {formatDate(note.id)}
+                          {formatDate(note.createdAt)}
                         </span>
                       </div>
 

@@ -1,71 +1,46 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useNote } from "../../Context/NoteContext";
 import { useParams } from "react-router-dom";
-import PrimaryButton from "../PrimaryButton/PrimaryButton";
 import { useNavigate } from "react-router-dom";
 import { FaCheck, FaTimes } from "react-icons/fa";
+import axios from "axios"
+
 
 function Note() {
   const [title, setTitle] = useState("");
-  const [note, setNote] = useState("");
-  const [originalTitle, setOriginalTitle] = useState("");
-  const [originalContent, setOriginalContent] = useState("");
+  const [content, setContent] = useState("");
   const [isSaving, setIsSaving] = useState(false);
+  const [noteError, setNoteError] = useState("")
 
   const navigate = useNavigate();
 
-  const { notes, setInNote, inNote, saveNote, cancelNote } = useNote();
+  const { notes, setInNote, inNote, cancelNote } = useNote();
   const { id } = useParams();
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      localStorage.setItem("draft-note", JSON.stringify({ title, note }));
-      setIsSaving(true);
-      setTimeout(() => setIsSaving(false), 800);
-    }, 1000);
-
-    return () => {
-      clearTimeout(timer);
-    };
-  }, [title, note]);
-
-  useEffect(() => {
-    if (id !== "new") {
-      const draft = notes.find((note) => note.id === Number(id));
-      console.log(draft);
-      if (draft) {
-        setTitle(draft.title);
-        setNote(draft.note);
-        setOriginalTitle(draft.title);
-        setOriginalContent(draft.note);
+  const createNote = async()=>{
+    try {
+      if(!content){
+        setNoteError("content should not be empty")
       }
+  
+      const res = await axios.post("http://localhost:8000/api/v1/add-note", {title, content}, {withCredentials: true})
+
+      console.log(res)
+    } catch (error) {
+      setNoteError(error)
     }
-  }, [id, notes]);
+  }
 
   const handleSave = () => {
-    setInNote(false);
-    if (title == "" && note != "") {
-      if (id === "new") {
-        saveNote(id, "Note Title", note);
-      } else {
-        saveNote(Number(id), title, note);
-      }
-    } else if (title != "" && note != "") {
-      if (id === "new") {
-        saveNote(id, title, note);
-      } else {
-        saveNote(Number(id), title, note);
-      }
+    if(id === "new"){
+      createNote()
     }
+    setInNote(false);
     navigate("/home");
   };
 
   const handleCancel = () => {
-    if (id != "new") {
-      setTitle(originalTitle || "");
-      setNote(originalContent || "");
-      setInNote(false);
-    }
+    
     cancelNote();
     navigate("/home");
   };
@@ -134,15 +109,15 @@ function Note() {
         <div className="flex-1 flex flex-col p-6 overflow-hidden">
           <div className="flex-1 relative">
             <textarea
-              value={note}
-              onChange={(e) => setNote(e.target.value)}
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
               placeholder="Start writing your thoughts..."
               className="w-full h-full resize-none outline-none glass-effect rounded-2xl p-6 text-gray-700 text-lg leading-relaxed placeholder:text-gray-400 shadow-sm border border-gray-200/50 transition-all duration-300 focus:bg-white/80 focus:shadow-md focus:border-cyan-300/50 scrollbar-thin"
             ></textarea>
 
             {/* Character count */}
             <div className="absolute bottom-4 right-4 text-xs text-gray-400 glass-effect-strong px-3 py-1.5 rounded-full border border-gray-200/50">
-              {note.length} characters
+              {content.length} characters
             </div>
           </div>
         </div>

@@ -1,4 +1,5 @@
 import {  createContext, useContext, useEffect, useState } from "react";
+import axios from "axios"
 
 const NoteContext = createContext();
 
@@ -8,6 +9,7 @@ export const NoteProvider = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState("")
   const [inNote, setInNote] = useState(true)
+
 
   const addNote = (title, note) => {
     setNotes((prev) => [...prev, { id: Date.now(), title, note }]);
@@ -25,29 +27,29 @@ export const NoteProvider = ({ children }) => {
     setNotes((prev) => prev.filter((note) => note.id !== id));
   };
 
-  useEffect(()=>{
-    const notes = JSON.parse(localStorage.getItem("notes"))
 
-    if(notes && notes.length>0){
-        setNotes(notes)
+  // fetching notes from the backend
+  const getNote = async()=>{
+    try {
+      const res = await axios.get("http://localhost:8000/api/v1/get-notes", {withCredentials: true })
+
+      const notes = res.data.data
+      if(notes.length === 0){
+        setNotes([])
+      }
+
+      setNotes(notes)
+    } catch (error) {
+      console.log(error)
     }
-  },[])
-
-  useEffect(()=>{
-    localStorage.setItem("notes", JSON.stringify(notes))
-  },[notes])
-
-
-  const saveNote = (id, title, note) =>{
-    if(id === "new"){
-        addNote(title, note)
-    }
-    else{
-        updateNote(id, title, note)
-    }
-
-    localStorage.removeItem("draft-note")
   }
+
+  useEffect(()=>{
+    if(isLoggedIn){
+      getNote()
+    }
+  },[isLoggedIn, inNote, inNote, notes])
+
 
 
   const cancelNote = () =>{
@@ -70,8 +72,7 @@ export const NoteProvider = ({ children }) => {
         setUser,
         inNote,
         setInNote,
-        saveNote,
-        cancelNote
+        cancelNote,
       }}
     >
       {children}
