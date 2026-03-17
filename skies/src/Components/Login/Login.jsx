@@ -30,7 +30,7 @@ function Login({ setAuthType }) {
     }
 
     try {
-      const response = await axios.post(`${baseUrl}/login`, {
+      const response = await axios.post(`${baseUrl}/api/v1/login`, {
         email, 
         password},
       {withCredentials: true})
