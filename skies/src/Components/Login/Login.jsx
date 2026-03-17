@@ -12,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 function Login({ setAuthType }) {
+  const baseUrl = import.meta.env.VITE_BASE_URI;
   const { setIsLoggedIn, setUser, } =
     useNote();
 
@@ -29,7 +30,7 @@ function Login({ setAuthType }) {
     }
 
     try {
-      const response = await axios.post("http://localhost:8000/api/v1/login", {
+      const response = await axios.post(`${baseUrl}/login`, {
         email, 
         password},
       {withCredentials: true})

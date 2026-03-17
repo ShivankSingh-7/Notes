@@ -7,6 +7,7 @@ import axios from "axios"
 
 
 function Note() {
+  const baseUrl = import.meta.env.VITE_BASE_URI;
   const { notes, setInNote, inNote, cancelNote, title, setTitle, content, setContent } = useNote();
   const [isSaving, setIsSaving] = useState(false);
   const [noteError, setNoteError] = useState("")
@@ -22,7 +23,7 @@ function Note() {
         setNoteError("content should not be empty")
       }
   
-      const res = await axios.post("http://localhost:8000/api/v1/add-note", {title, content}, {withCredentials: true})
+      const res = await axios.post(`${baseUrl}/add-note`, {title, content}, {withCredentials: true})
 
       console.log(res)
     } catch (error) {
@@ -32,7 +33,7 @@ function Note() {
 
   const updateNote = async(id, title, content)=>{
     try {
-      const response = await axios.patch(`http://localhost:8000/api/v1/update-note/${id}`, {title, content}, {withCredentials: true})
+      const response = await axios.patch(`${baseUrl}/${id}`, {title, content}, {withCredentials: true})
 
       console.log(response)
     } catch (error) {

@@ -6,6 +6,7 @@ import axios from "axios"
 
 
 function SignUp({ setAuthType }) {
+  const baseUrl = import.meta.env.VITE_BASE_URI;
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -26,7 +27,7 @@ function SignUp({ setAuthType }) {
         return
       } else {
         try {
-          const response = await axios.post("http://localhost:8000/api/v1/register",{
+          const response = await axios.post(`${baseUrl}/register`,{
             fullName,
             userName,
             email,

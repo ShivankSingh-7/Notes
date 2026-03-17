@@ -4,6 +4,7 @@ import axios from "axios"
 const NoteContext = createContext();
 
 export const NoteProvider = ({ children }) => {
+  const baseUrl = import.meta.env.VITE_BASE_URI;
   const [notes, setNotes] = useState([]);
   const[userName, setUserName] = useState()
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -20,7 +21,7 @@ export const NoteProvider = ({ children }) => {
 
   const deleteNote = async(id) => {
     try {
-      const response = await axios.delete(`http://localhost:8000/api/v1/delete-note/${id}`, {withCredentials: true})
+      const response = await axios.delete(`${baseUrl}/${id}`, {withCredentials: true})
 
       console.log(response)
     } catch (error) {
@@ -32,7 +33,7 @@ export const NoteProvider = ({ children }) => {
   // fetching notes from the backend
   const getNote = async()=>{
     try {
-      const res = await axios.get("http://localhost:8000/api/v1/get-notes", {withCredentials: true })
+      const res = await axios.get(`${baseUrl}/get-notes`, {withCredentials: true })
 
       const notes = res.data.data
       if(notes.length === 0){
@@ -54,7 +55,7 @@ export const NoteProvider = ({ children }) => {
 
   const openNote = async(id)=>{
     try {
-      const response = await axios.get(`http://localhost:8000/api/v1/get-note/${id}`, {withCredentials: true})
+      const response = await axios.get(`${baseUrl}/${id}`, {withCredentials: true})
 
       const prevNote = response.data.data
       setTitle(prevNote.title)
