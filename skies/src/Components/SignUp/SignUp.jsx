@@ -27,7 +27,7 @@ function SignUp({ setAuthType }) {
         return
       } else {
         try {
-          const response = await axios.post(`${baseUrl}/register`,{
+          const response = await axios.post(`${baseUrl}/api/v1/register`,{
             fullName,
             userName,
             email,
