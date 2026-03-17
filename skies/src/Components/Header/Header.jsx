@@ -8,6 +8,7 @@ import { FiPlus, FiLogOut, FiHome, FiInfo } from "react-icons/fi";
 import axios from "axios";
 
 function Header({ setAuthType }) {
+  const baseUrl = import.meta.env.VITE_BASE_URI;
   const { isLoggedIn, setIsLoggedIn, setInNote } = useNote();
   const [isScrolled, setIsScrolled] = useState(false);
   const [logoutError, setLogoutError] = useState()
@@ -24,7 +25,7 @@ function Header({ setAuthType }) {
 
   const handleLogOut = async() => {
     try {
-      await axios.post("http://localhost:8000/api/v1/logout", {}, { withCredentials: true })
+      await axios.post(`${baseUrl}/api/v1/logout`, {}, { withCredentials: true })
     setIsLoggedIn(false);
     } catch (error) {
       setLogoutError(error.response?.data?.message || "logout failed")
