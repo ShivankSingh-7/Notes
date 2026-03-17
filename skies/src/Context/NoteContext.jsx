@@ -9,19 +9,14 @@ export const NoteProvider = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState("")
   const [inNote, setInNote] = useState(true)
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
 
 
   const addNote = (title, note) => {
     setNotes((prev) => [...prev, { id: Date.now(), title, note }]);
   };
 
-  const updateNote = (id, newTitle, newNote) => {
-    setNotes((prev) =>
-      prev.map((note) =>
-        note.id === id ? { ...note, title: newTitle, note: newNote } : note,
-      ),
-    );
-  };
 
   const deleteNote = async(id) => {
     try {
@@ -54,8 +49,20 @@ export const NoteProvider = ({ children }) => {
     if(isLoggedIn){
       getNote()
     }
-  },[isLoggedIn, inNote, inNote, notes])
+  },[isLoggedIn, inNote, notes])
 
+
+  const openNote = async(id)=>{
+    try {
+      const response = await axios.get(`http://localhost:8000/api/v1/get-note/${id}`, {withCredentials: true})
+
+      const prevNote = response.data.data
+      setTitle(prevNote.title)
+      setContent(prevNote.content)
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
 
   const cancelNote = () =>{
@@ -68,7 +75,6 @@ export const NoteProvider = ({ children }) => {
         notes,
         setNotes,
         addNote,
-        updateNote,
         isLoggedIn,
         setIsLoggedIn,
         deleteNote,
@@ -79,6 +85,11 @@ export const NoteProvider = ({ children }) => {
         inNote,
         setInNote,
         cancelNote,
+        title,
+        content,
+        setContent,
+        setTitle, 
+        openNote
       }}
     >
       {children}

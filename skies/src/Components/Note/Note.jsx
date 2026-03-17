@@ -7,14 +7,13 @@ import axios from "axios"
 
 
 function Note() {
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
+  const { notes, setInNote, inNote, cancelNote, title, setTitle, content, setContent } = useNote();
   const [isSaving, setIsSaving] = useState(false);
   const [noteError, setNoteError] = useState("")
 
   const navigate = useNavigate();
 
-  const { notes, setInNote, inNote, cancelNote } = useNote();
+  
   const { id } = useParams();
 
   const createNote = async()=>{
@@ -31,24 +30,25 @@ function Note() {
     }
   }
 
-  const updateNote = async(id)=>{
+  const updateNote = async(id, title, content)=>{
     try {
-      const update = {title, content}
-      const updatedNote = await axios.patch(`http://localhost:8000/api/v1/update-note/${id}`, update, {withCredentials: true})
+      const response = await axios.patch(`http://localhost:8000/api/v1/update-note/${id}`, {title, content}, {withCredentials: true})
 
-      console.log(updatedNote)
+      console.log(response)
     } catch (error) {
       console.log(error)
     }
   }
 
-  const handleSave = () => {
+  const handleSave = async() => {
     if(id === "new"){
-      createNote()
+      await createNote()
     }
     else{
-      updateNote()
+      await updateNote(id, title, content)
     }
+    setTitle("")
+    setContent("")
     setInNote(false);
     navigate("/home");
   };

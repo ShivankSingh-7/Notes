@@ -5,7 +5,7 @@ import { FiEdit } from "react-icons/fi";
 import { FaTrash } from "react-icons/fa";
 
 function Home() {
-  const { user, setInNote, notes, deleteNote } = useNote();
+  const { user, setInNote, notes, deleteNote, openNote } = useNote();
 
   const softColors = [
     "from-blue-100 to-blue-200",
@@ -25,12 +25,18 @@ function Home() {
     return softColors[index];
   };
 
+
   function formatDate(timestamp) {
     const date = new Date(timestamp);
     const month = date.toLocaleString("en-US", { month: "short" });
     const day = date.getDate();
     const year = date.getFullYear();
     return `${month} ${day}, ${year}`;
+  }
+
+  const handleEdit = (id)=>{
+    openNote(id)
+    setInNote(true)
   }
 
   return (
@@ -145,7 +151,7 @@ function Home() {
 
                         <Link
                           to={`/note/${note._id}`}
-                          onClick={() => setInNote(true)}
+                          onClick={() => handleEdit(note._id)}
                         >
                           <button
                             className="p-2 rounded-lg bg-white/60 hover:bg-cyan-100 border border-white/80 hover:border-cyan-300 transition-all duration-200 hover:scale-110 active:scale-95 group/edit"

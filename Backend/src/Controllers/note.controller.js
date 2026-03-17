@@ -94,7 +94,7 @@ const updateNote = asyncHandler(async(req, res)=>{
     const update = req.body
 
     const updatedNote = await Note.findOneAndUpdate(
-        noteId,
+        { _id: noteId, owner: req.user._id },
         update,
         {
             new: true,
