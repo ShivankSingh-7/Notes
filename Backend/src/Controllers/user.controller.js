@@ -5,11 +5,13 @@ import { User } from "../models/user.model.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.utils.js";
 
 
-res.cookie("token", token, {
+const cookieOptions = {
   httpOnly: true,
-  secure: true,
-  sameSite: "None",
-});
+  secure: true,        // 🔥 force true (don’t rely on NODE_ENV here)
+  sameSite: "None",    // 🔥 REQUIRED for Vercel ↔ Render
+  path: "/",
+  maxAge: 24 * 60 * 60 * 1000,
+};
 
 
 const generateAccessAndRefershToken = async (userId) => {
@@ -77,10 +79,6 @@ const registerUser = asyncHandler(async (req, res) => {
     throw new ApiError(500, "Something went wrong while regestering the user");
   }
 
-  const options = {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production"
-  };
 
   return res
     .status(201)
@@ -114,10 +112,6 @@ const loginUser = asyncHandler(async (req, res) => {
 
   const loggedInUser = await User.findById(user._id).select("-refreshToken");
 
-  const options = {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production"
-  };
 
   return res
     .status(201)
@@ -149,10 +143,6 @@ const logoutUser = asyncHandler(async (req, res) => {
     },
   );
 
-  const options = {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production"
-  };
 
   return res
     .status(201)
