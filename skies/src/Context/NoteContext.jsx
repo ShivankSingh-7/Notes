@@ -23,8 +23,14 @@ export const NoteProvider = ({ children }) => {
     );
   };
 
-  const deleteNote = (id) => {
-    setNotes((prev) => prev.filter((note) => note.id !== id));
+  const deleteNote = async(id) => {
+    try {
+      const response = await axios.delete(`http://localhost:8000/api/v1/delete-note/${id}`, {withCredentials: true})
+
+      console.log(response)
+    } catch (error) {
+      console.log(error)
+    }
   };
 
 

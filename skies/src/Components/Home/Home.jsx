@@ -136,7 +136,7 @@ function Home() {
                       {/* Action Buttons */}
                       <div className="flex gap-2">
                         <button
-                          onClick={() => deleteNote(note.id)}
+                          onClick={() => deleteNote(note._id)}
                           className="p-2 rounded-lg bg-white/60 hover:bg-red-100 border border-white/80 hover:border-red-300 transition-all duration-200 hover:scale-110 active:scale-95 group/delete"
                           title="Delete note"
                         >
@@ -144,7 +144,7 @@ function Home() {
                         </button>
 
                         <Link
-                          to={`/note/${note.id}`}
+                          to={`/note/${note._id}`}
                           onClick={() => setInNote(true)}
                         >
                           <button

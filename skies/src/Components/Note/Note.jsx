@@ -31,9 +31,23 @@ function Note() {
     }
   }
 
+  const updateNote = async(id)=>{
+    try {
+      const update = {title, content}
+      const updatedNote = await axios.patch(`http://localhost:8000/api/v1/update-note/${id}`, update, {withCredentials: true})
+
+      console.log(updatedNote)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   const handleSave = () => {
     if(id === "new"){
       createNote()
+    }
+    else{
+      updateNote()
     }
     setInNote(false);
     navigate("/home");
