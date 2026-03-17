@@ -5,13 +5,11 @@ import { User } from "../models/user.model.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.utils.js";
 
 
-const cookieOptions = {
+res.cookie("token", token, {
   httpOnly: true,
-  secure: process.env.NODE_ENV === "production",
-  path: "/",
-  sameSite: "lax",
-  maxAge: 24 * 60 * 60 * 1000, // 1 day
-};
+  secure: true,
+  sameSite: "None",
+});
 
 
 const generateAccessAndRefershToken = async (userId) => {

@@ -21,13 +21,14 @@ function Note() {
     try {
       if(!content){
         setNoteError("content should not be empty")
+        return
       }
   
       const res = await axios.post(`${baseUrl}/api/v1/add-note`, {title, content}, {withCredentials: true})
 
       console.log(res)
     } catch (error) {
-      setNoteError(error)
+      setNoteError(error.response)
     }
   }
 
