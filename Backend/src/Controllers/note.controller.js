@@ -28,7 +28,7 @@ const addNote = asyncHandler(async( req, res)=>{
     )
 })
 
-const getNote = asyncHandler(async(req, res)=>{
+const getNotes = asyncHandler(async(req, res)=>{
     const notes = await Note.find({owner: req.user._id})
 
     if(!notes){
@@ -64,5 +64,54 @@ const deleteNote = asyncHandler(async(req, res)=>{
     )
 })
 
+const getNote = asyncHandler(async(req, res)=>{
+    const noteId = req.params.id
 
-export {addNote, getNote, deleteNote}
+    if(!noteId){
+        throw new ApiError(404, "Note not found")
+    }
+
+    const note = await Note.findById(noteId)
+
+    if(!note){
+        throw new ApiError(500, "can not get the note")
+    }
+
+    return res
+    .status(200)
+    .json(
+        new ApiResponse(200, note, "successfully fetched the note")
+    )
+})
+
+const updateNote = asyncHandler(async(req, res)=>{
+    const noteId = req.params.id
+
+    if(!noteId){
+        throw new ApiError(404, "can not get the note")
+    }
+
+    const update = req.body
+
+    const updatedNote = await Note.findOneAndUpdate(
+        noteId,
+        update,
+        {
+            new: true,
+            runValidators: true
+        }
+    )
+
+    if(!updatedNote){
+        throw new ApiError(404, "can not find the note")
+    }
+
+    return res
+    .status(201)
+    .json(
+        new ApiResponse(201, updatedNote, "note successfully updated")
+    )
+})
+
+
+export {addNote, getNotes, deleteNote, getNote, updateNote}
