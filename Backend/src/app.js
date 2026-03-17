@@ -23,6 +23,10 @@ app.use(cookieParser());
 import userRouter from "./routes/user.routes.js"
 import noteRouter from "./routes/note.routes.js"
 
+app.get("/", (req, res) => {
+  res.send("API is running 🚀");
+});
+
 app.use("/api/v1/", userRouter)
 app.use("/api/v1/", noteRouter)
 
