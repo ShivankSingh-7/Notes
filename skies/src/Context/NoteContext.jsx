@@ -55,7 +55,7 @@ export const NoteProvider = ({ children }) => {
 
   const openNote = async(id)=>{
     try {
-      const response = await axios.get(`${baseUrl}/${id}`, {withCredentials: true})
+      const response = await axios.get(`${baseUrl}/api/v1/get-note/${id}`, {withCredentials: true})
 
       const prevNote = response.data.data
       setTitle(prevNote.title)

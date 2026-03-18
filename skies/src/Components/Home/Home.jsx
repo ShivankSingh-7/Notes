@@ -34,8 +34,8 @@ function Home() {
     return `${month} ${day}, ${year}`;
   }
 
-  const handleEdit = (id)=>{
-    openNote(id)
+  const handleEdit = async(id)=>{
+    await openNote(id)
     setInNote(true)
   }
 
