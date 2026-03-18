@@ -58,6 +58,7 @@ export const NoteProvider = ({ children }) => {
       const response = await axios.get(`${baseUrl}/api/v1/get-note/${id}`, {withCredentials: true})
 
       const prevNote = response.data.data
+  
       setTitle(prevNote.title)
       setContent(prevNote.content)
     } catch (error) {
